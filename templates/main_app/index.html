@@ -1,3 +1,27 @@
-{% extends "main_app/base.html" %} 
-{% block title %}Home{% endblock title %} 
-{% block content %} This is a index file.{% endblock content %}
+{% extends "main_app/base.html" %} {% load static %} 
+{% block title %}Home{%endblock title %} 
+{%block customsheets %}
+<link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css" />
+{%endblock customsheets %}
+
+{%block content %}
+<main class="px-3 d-flex justify-content-center">
+  <div class="w-75 mt-5 d-flex flex-column align-items-center gap-3">
+    <h1>Student Management System</h1>
+    <p class="lead text-justify">
+      Our student management system makes it easy to keep track of all your
+      school's student information in one place. With this system, you can
+      quickly enroll new students, record attendance, manage grades, and
+      communicate with parents. The user-friendly interface allows teachers and
+      staff to access important student data whenever they need it. This helps
+      the school run more efficiently and allows everyone to focus on supporting
+      the students' academic success.
+    </p>
+    <p class="lead d-flex justify-content-center">
+      <a href="#" class="btn btn-lg btn-light fw-bold border-white bg-white"
+        >Contact Us</a
+      >
+    </p>
+  </div>
+</main>
+{% endblock content %}

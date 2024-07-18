@@ -5,15 +5,34 @@
     <meta charset="UTF-8" />
     <title>{% block title %}{% endblock title %} | SMS</title>
     <link
+      href="{% static 'css/bootstrap.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
       href="{% static 'css/bootstrap.min.css' %}"
       rel="stylesheet"
       type="text/css"
     />
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <!-- For custom css and js for each page-->
+     {% block customsheets %}{% endblock customsheets %}
+
+     <!--Fonts for all pages-->
+     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+      body {
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+        font-size:1rem;
+      }
+      
+      </style>
   </head>
-  <body>
+  <body class="bg-dark" data-bs-theme="dark">
     <!-- NAVBAR -->
-    {% include "navbar.html" %}
+    {% include "main_app/navbar.html" %}
     <!-- CONTENT -->
     {% block content %}{% endblock content %}
   </body>

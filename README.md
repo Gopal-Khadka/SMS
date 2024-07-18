@@ -8,3 +8,9 @@ Since the NavBar is common for all pages (except logins), it is the first obstac
 
 ### Login Page
 Login Page is added from Bootstrap examples `SignIn Form`. The authentication will later be handled by respective views function.
+
+### Authentication (Logging In and Out)
+The authentication is handled by the functions provided by the Django framework.
+
+### Index Page
+The index page is made simple with example `Cover` provided by Bootstrap.
