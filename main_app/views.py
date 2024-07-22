@@ -9,6 +9,11 @@ def index(request):
         return redirect("main_app:logInUser")
     return render(request, "main_app/index.html")
 
+def contact(request):
+    # if not request.user.is_authenticated:
+    #     return redirect("main_app:logInUser")
+    return render(request, "main_app/contact.html")
+
 
 def logInUser(request):
     context = {"today": datetime.today().year}

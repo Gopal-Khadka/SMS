@@ -1,3 +1,5 @@
+ {% load static %}
+ <script src="{% static "js/navbar.js" %}"></script>
  <nav class="navbar navbar-expand-md bg-dark">
   <div class="container-fluid">
     <div class="d-flex justify-content-between w-100">
@@ -20,11 +22,13 @@
     </div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Services</a>
-        <a class="nav-link" href="#">Dashboard</a>
-        <a class="nav-link" href="#">Contact</a>
-        <a class="nav-link" href="{% url "main_app:logOutUser" %}">LogOut</a>
+
+        <!--NOTE: This may look bad code but is necessary to highlight the current active page-->
+        <a class="nav-link {% if request.resolver_match.view_name == "main_app:index" %}active{% endif %}" href="{% url "main_app:index" %}">Home</a>
+        {% comment %} <a class="nav-link {% if request.resolver_match.view_name == "main_app:services" %}active{% endif %}" href="{% url "main_app:services" %}">Services</a> {% endcomment %}
+        {% comment %} <a class="nav-link {% if request.resolver_match.view_name == "main_app:dashboard" %}active{% endif %}" href="{% url "main_app:dashboard" %}">Dashboard</a> {% endcomment %}
+        <a class="nav-link {% if request.resolver_match.view_name == "main_app:contact" %}active{% endif %}" href="{% url "main_app:contact" %}">Contact</a>
+        <a class="nav-link {% if request.resolver_match.view_name == "main_app:logOutUser" %}active{% endif %}" href="{% url "main_app:logOutUser" %}">LogOut</a>
       </div>
     </div>
   </div>
