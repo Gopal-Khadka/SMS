@@ -1,0 +1,46 @@
+{% extends "main_app/base.html" %} {% load static %} 
+{% block title %}Services{%endblock title %} 
+
+{% comment %} Student Profile: 
+Course Registration: Students can browse and select courses, check availability, and receive confirmation of their registrations.
+Exam Results: Students can access and view their exam grades for each course, download or print result sheets. {% endcomment %}
+
+
+{%block content %}
+<div class="container">
+
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 g-3 mt-5">
+      <div class="col">
+        <div class="card shadow-sm">
+         <img src="{% static "main_app/img/courses.jpg" %}" class="object-fit-cover rounded" width="100%" height="225">
+          <div class="card-body">
+            <h5 class="card-title">Course Registration</h5>
+            <p class="card-text">Students can browse and select courses, check availability, and receive confirmation of their registrations.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+         <img src="{% static "main_app/img/exam.jpeg" %}" class="object-fit-cover rounded" width="100%" height="225">
+          <div class="card-body">
+            <h5 class="card-title">Exam Results</h5>
+            <p class="card-text"> Students can access and view their exam grades for each course, download or print result sheets. </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card shadow-sm">
+         <img src="{% static "main_app/img/student_profile.jpg" %}" class="object-fit-cover rounded" width="100%" height="225">
+          <div class="card-body">
+            <h5 class="card-title">Student Profile</h5>
+            <p class="card-text">Students can view and manage their personal information and receive notifications or announcements.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  {%endblock content%}

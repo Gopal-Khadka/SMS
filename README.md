@@ -20,3 +20,6 @@ A form is provided to the user for contacting the administration. Just the UI is
 
 ### NavBar Active Page
 When I click the button in the navigation bar, I want it to highlight the active page in a lighter color. An external js(jquery code) file is added to the navbar html page. Additionally, if-else statements are also added to navbar file because the `active` state of the navbar links gets refreshed when page loads handled by python views function.
+
+### Services Page
+Simple services page is made in this step just for display purposes.
