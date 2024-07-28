@@ -23,3 +23,6 @@ When I click the button in the navigation bar, I want it to highlight the active
 
 ### Services Page
 Simple services page is made in this step just for display purposes.
+
+### Dashboard Page
+This is going to be our main page where all the main functionalities and features will be located and managed. In this section, we will only make UI and looks.

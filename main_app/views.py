@@ -9,6 +9,10 @@ def index(request):
     return render(request, "main_app/index.html")
 
 @login_required(login_url='main_app:logInUser')
+def dashboard(request):
+    return render(request, "main_app/dashboard.html")
+
+@login_required(login_url='main_app:logInUser')
 def contact(request):
     return render(request, "main_app/contact.html")
 

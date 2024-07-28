@@ -1,0 +1,56 @@
+{% extends "main_app/base.html" %} {% load static %} 
+{% block title %}Home{%endblock title %} 
+
+{%block content %}
+<div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+      <span class="fs-4">SMS</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="#" class="nav-link active" aria-current="page">
+          Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          Teacher
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          Student
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          Attendance
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          Fee Structure
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          Notices
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+        <strong>mdo</strong>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" style="">
+        <li><a class="dropdown-item" href="{% url "main_app:index" %}">Home</a></li>
+        <li><a class="dropdown-item" href="{% url "main_app:contact" %}">Contact</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="{% url "main_app:logOutUser" %}">Sign out</a></li>
+      </ul>
+    </div>
+  </div>
+{%endblock content%}

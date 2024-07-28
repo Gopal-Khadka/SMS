@@ -33,7 +33,10 @@
   </head>
   <body class="bg-dark" data-bs-theme="dark">
     <!-- NAVBAR -->
-    {% include "main_app/navbar.html" %}
+    <!-- Check if the current page is not 'dashboard' before including the navbar -->
+    {% if request.path != '/dashboard' %}
+      {% include "main_app/navbar.html" %}
+    {% endif %}
     <!-- CONTENT -->
     {% block content %}{% endblock content %}
   </body>

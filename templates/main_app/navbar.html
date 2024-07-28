@@ -26,7 +26,7 @@
         <!--NOTE: This may look bad code but is necessary to highlight the current active page-->
         <a class="nav-link {% if request.resolver_match.view_name == "main_app:index" %}active{% endif %}" href="{% url "main_app:index" %}">Home</a>
         <a class="nav-link {% if request.resolver_match.view_name == "main_app:services" %}active{% endif %}" href="{% url "main_app:services" %}">Services</a>
-        {% comment %} <a class="nav-link {% if request.resolver_match.view_name == "main_app:dashboard" %}active{% endif %}" href="{% url "main_app:dashboard" %}">Dashboard</a> {% endcomment %}
+        <a class="nav-link {% if request.resolver_match.view_name == "main_app:dashboard" %}active{% endif %}" href="{% url "main_app:dashboard" %}">Dashboard</a>
         <a class="nav-link {% if request.resolver_match.view_name == "main_app:contact" %}active{% endif %}" href="{% url "main_app:contact" %}">Contact</a>
         <a class="nav-link {% if request.resolver_match.view_name == "main_app:logOutUser" %}active{% endif %}" href="{% url "main_app:logOutUser" %}">LogOut</a>
       </div>
