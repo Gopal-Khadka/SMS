@@ -26,3 +26,25 @@ Simple services page is made in this step just for display purposes.
 
 ### Dashboard Page
 This is going to be our main page where all the main functionalities and features will be located and managed. In this section, we will only make UI and looks.
+
+### Defining necessary models
+The model represents the database in the Django project. 
+
+1. `SessionYearModel`
+2. `CustomUser`
+3. `AdminHOD`
+4. `Staffs`
+5. `Courses`
+6. `Subjects`
+7. `Students`
+8. `Attendance`
+9. `AttendanceReport`
+10. `LeaveReportStudent`
+11. `LeaveReportStaff`
+12. `FeedBackStudent`
+13. `FeedBackStaffs`
+14. `NotificationStudent`
+15. `NotificationStaffs`
+16. `StudentResult`
+
+Each model class have their own importance and usage in this project. Refer to `models.py` file for more information.
