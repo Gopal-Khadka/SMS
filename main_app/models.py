@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -42,8 +43,8 @@ class CustomUser(AbstractUser):
 
     email = models.EmailField(unique=True)
     user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
-    gender = models.CharField(max_length=1, choices=GENDER,default="M")
-    profile_pic = models.ImageField(upload_to="media/profile_pic",null=True)
+    gender = models.CharField(max_length=1, choices=GENDER, default="M")
+    profile_pic = models.ImageField(upload_to="media/profile_pic", null=True)
     address = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -200,3 +201,37 @@ class StudentResult(models.Model):
     subject_assignment_marks = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+@receiver(post_save, sender=CustomUser)
+def create_user_profile(sender, instance, created, **kwargs):
+    """
+    Create a user profile when a CustomUser is created.
+    If user_type is 1, create an AdminHOD profile.
+    If user_type is 2, create a Staffs profile.
+    If user_type is 3, create a Students profile.
+    """
+    if created:
+        if instance.user_type == 1:
+            AdminHOD.objects.create(admin=instance)
+        if instance.user_type == 2:
+            Staffs.objects.create(admin=instance)
+        if instance.user_type == 3:
+            Students.objects.create(admin=instance)
+
+
+@receiver(post_save, sender=CustomUser)
+def save_user_profile(sender, instance, **kwargs):
+    """
+    Save the related object (AdminHOD, Staffs, or Students) when a CustomUser is saved.
+    If user_type is 1, save the related AdminHOD object.
+    If user_type is 2, save the related Staffs object.
+    If user_type is 3, save the related Students object.
+    """
+
+    if instance.user_type == 1:
+        instance.admin.save()
+    if instance.user_type == 2:
+        instance.staff.save()
+    if instance.user_type == 3:
+        instance.student.save()
