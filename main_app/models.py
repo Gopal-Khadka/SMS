@@ -1,7 +1,27 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser,Group,Permission
-from django.db.models.signals import post_save
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import UserManager, BaseUserManager
 from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("The Email field must be set")
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        return self.create_user(email, password, **extra_fields)
 
 
 class SessionYearModel(models.Model):
@@ -17,16 +37,18 @@ class SessionYearModel(models.Model):
 # User and adding One More Field (user_type)
 class CustomUser(AbstractUser):
     # adds the extra field "user_type"
-    HOD = "1"
-    STAFF = "2"
-    STUDENT = "3"
+    USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"))
+    GENDER = [("M", "Male"), ("F", "Female")]
 
-    EMAIL_TO_USER_TYPE_MAP = {"hod": HOD, "staff": STAFF, "student": STUDENT}
-
-    user_type_data = ((HOD, "HOD"), (STAFF, "Staff"), (STUDENT, "Student"))
-    user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
-    groups = models.ManyToManyField(Group, related_name='custom_user_groups')
-    user_permissions = models.ManyToManyField(Permission, related_name='custom_user_permissions')
+    email = models.EmailField(unique=True)
+    user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
+    gender = models.CharField(max_length=1, choices=GENDER,default="M")
+    profile_pic = models.ImageField(upload_to="media/profile_pic",null=True)
+    address = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    REQUIRED_FIELDS = []
+    objects = CustomUserManager()
 
 
 class AdminHOD(models.Model):
@@ -82,7 +104,7 @@ class Students(models.Model):
     course_id = models.ForeignKey(Courses, on_delete=models.DO_NOTHING, default=1)
     session_year_id = models.ForeignKey(
         SessionYearModel, null=True, on_delete=models.CASCADE
-    ) # map many to one with "SessionYearModel"
+    )  # map many to one with "SessionYearModel"
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -90,7 +112,9 @@ class Students(models.Model):
 class Attendance(models.Model):
     # Subject Attendance
     id = models.AutoField(primary_key=True)
-    subject_id = models.ForeignKey(Subjects, on_delete=models.DO_NOTHING) # no action will be taken when a referenced Subjects instance is deleted
+    subject_id = models.ForeignKey(
+        Subjects, on_delete=models.DO_NOTHING
+    )  # no action will be taken when a referenced Subjects instance is deleted
     attendance_date = models.DateField()
     session_year_id = models.ForeignKey(SessionYearModel, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -106,6 +130,7 @@ class AttendanceReport(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 # When the student applies for the leave
 class LeaveReportStudent(models.Model):
     id = models.AutoField(primary_key=True)
@@ -115,6 +140,7 @@ class LeaveReportStudent(models.Model):
     leave_status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
 # When the staff applies for the leave
 class LeaveReportStaff(models.Model):
@@ -126,6 +152,7 @@ class LeaveReportStaff(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 # When the student provides the feedback
 class FeedBackStudent(models.Model):
     id = models.AutoField(primary_key=True)
@@ -134,6 +161,7 @@ class FeedBackStudent(models.Model):
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
 # When the staff provides the feedback
 class FeedBackStaffs(models.Model):
@@ -153,6 +181,7 @@ class NotificationStudent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 # Notifications/notices only for the student
 class NotificationStaffs(models.Model):
     id = models.AutoField(primary_key=True)
@@ -161,7 +190,8 @@ class NotificationStaffs(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-# Result 
+
+# Result
 class StudentResult(models.Model):
     id = models.AutoField(primary_key=True)
     student_id = models.ForeignKey(Students, on_delete=models.CASCADE)
