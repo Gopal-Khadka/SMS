@@ -41,6 +41,7 @@ class CustomUser(AbstractUser):
     USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"))
     GENDER = [("M", "Male"), ("F", "Female")]
 
+    username = None
     email = models.EmailField(unique=True)
     user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
     gender = models.CharField(max_length=1, choices=GENDER, default="M")
@@ -48,6 +49,7 @@ class CustomUser(AbstractUser):
     address = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
 
@@ -55,7 +57,7 @@ class CustomUser(AbstractUser):
 class AdminHOD(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(
-        CustomUser, on_delete=models.CASCADE
+        CustomUser, on_delete=models.CASCADE, related_name="adminhod"
     )  # if the linked CustomUser instance is deleted, the AdminHOD instance will also be deleted.
     created_at = models.DateTimeField(
         auto_now_add=True
@@ -69,7 +71,7 @@ class AdminHOD(models.Model):
 class Staffs(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(
-        CustomUser, on_delete=models.CASCADE
+        CustomUser, on_delete=models.CASCADE, related_name="staff"
     )  # map 1 on 1 to custom user
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -98,7 +100,9 @@ class Subjects(models.Model):
 
 class Students(models.Model):
     id = models.AutoField(primary_key=True)
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    admin = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, related_name="student"
+    )
     gender = models.CharField(max_length=50)
     profile_pic = models.FileField()
     address = models.TextField()
@@ -229,9 +233,9 @@ def save_user_profile(sender, instance, **kwargs):
     If user_type is 3, save the related Students object.
     """
 
-    if instance.user_type == 1:
-        instance.admin.save()
-    if instance.user_type == 2:
+    if instance.user_type == 1:  # HOD
+        instance.adminhod.save()
+    elif instance.user_type == 2:  # Staff
         instance.staff.save()
-    if instance.user_type == 3:
+    elif instance.user_type == 3:  # Student
         instance.student.save()
