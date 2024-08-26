@@ -38,12 +38,12 @@ class SessionYearModel(models.Model):
 # User and adding One More Field (user_type)
 class CustomUser(AbstractUser):
     # adds the extra field "user_type"
-    USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"))
+    USER_TYPE = [("1", "HOD"), ("2", "Staff"), ("3", "Student")]
     GENDER = [("M", "Male"), ("F", "Female")]
 
     username = None
     email = models.EmailField(unique=True)
-    user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
+    user_type = models.CharField(default="1", choices=USER_TYPE, max_length=2)
     gender = models.CharField(max_length=1, choices=GENDER, default="M")
     profile_pic = models.ImageField(upload_to="media/profile_pic", null=True)
     address = models.TextField(null=True)
@@ -52,6 +52,10 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
+
+    class Meta:
+        verbose_name = "Custom User"
+        verbose_name_plural = verbose_name + "s"
 
 
 class AdminHOD(models.Model):
@@ -67,6 +71,13 @@ class AdminHOD(models.Model):
     )  # updates when the instance is updated
     objects = models.Manager()  # provides model functions like all(), get(), filter()
 
+    class Meta:
+        verbose_name = "AdminHOD"
+        verbose_name_plural = verbose_name + "s"
+
+    def __str__(self):
+        return self.admin.email
+
 
 class Staffs(models.Model):
     id = models.AutoField(primary_key=True)
@@ -77,12 +88,26 @@ class Staffs(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "Staff"
+        verbose_name_plural = verbose_name + "s"
+
+    def __str__(self):
+        return self.admin.first_name + " " + self.admin.last_name
+
 
 class Courses(models.Model):
     id = models.AutoField(primary_key=True)
     course_name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.course_name
+
+    class Meta:
+        verbose_name = "Course"
+        verbose_name_plural = verbose_name + "s"
 
 
 class Subjects(models.Model):
@@ -96,6 +121,13 @@ class Subjects(models.Model):
     staff_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.subject_name
+
+    class Meta:
+        verbose_name = "Subject"
+        verbose_name_plural = verbose_name + "s"
 
 
 class Students(models.Model):
@@ -112,6 +144,13 @@ class Students(models.Model):
     )  # map many to one with "SessionYearModel"
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Student"
+        verbose_name_plural = verbose_name + "s"
+
+    def __str__(self):
+        return self.admin.get_full_name()
 
 
 class Attendance(models.Model):
@@ -177,6 +216,10 @@ class FeedBackStaffs(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "Feedback Staff"
+        verbose_name_plural = verbose_name + "s"
+
 
 # Notifications/notices only for the student
 class NotificationStudent(models.Model):
@@ -194,6 +237,10 @@ class NotificationStaffs(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Notification Staff"
+        verbose_name_plural = verbose_name + "s"
 
 
 # Result
@@ -216,11 +263,11 @@ def create_user_profile(sender, instance, created, **kwargs):
     If user_type is 3, create a Students profile.
     """
     if created:
-        if instance.user_type == 1:
+        if instance.user_type == "1":
             AdminHOD.objects.create(admin=instance)
-        if instance.user_type == 2:
+        elif instance.user_type == "2":
             Staffs.objects.create(admin=instance)
-        if instance.user_type == 3:
+        elif instance.user_type == "3":
             Students.objects.create(admin=instance)
 
 
@@ -233,9 +280,9 @@ def save_user_profile(sender, instance, **kwargs):
     If user_type is 3, save the related Students object.
     """
 
-    if instance.user_type == 1:  # HOD
+    if instance.user_type == "1":  # HOD
         instance.adminhod.save()
-    elif instance.user_type == 2:  # Staff
+    elif instance.user_type == "2":  # Staff
         instance.staff.save()
-    elif instance.user_type == 3:  # Student
+    elif instance.user_type == "3":  # Student
         instance.student.save()
