@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .models import CustomUser
 
 @login_required(login_url='main_app:logInUser')
 def index(request):

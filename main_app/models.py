@@ -1,10 +1,10 @@
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import UserManager, BaseUserManager
+from django.contrib.auth.models import BaseUserManager
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
+from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.hashers import make_password
+import os
 
 
 class CustomUserManager(BaseUserManager):
@@ -14,7 +14,7 @@ class CustomUserManager(BaseUserManager):
 
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        user.set_password(password)
+        user.set_password(make_password(password))
         user.save(using=self._db)
         return user
 
@@ -45,7 +45,9 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     user_type = models.CharField(default="1", choices=USER_TYPE, max_length=2)
     gender = models.CharField(max_length=1, choices=GENDER, default="M")
-    profile_pic = models.ImageField(upload_to="media/profile_pic", null=True)
+    profile_pic = models.ImageField(
+        upload_to="media/profile_pic", null=True, blank=True
+    )
     address = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -84,7 +86,7 @@ class Staffs(models.Model):
     admin = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, related_name="staff"
     )  # map 1 on 1 to custom user
-    address = models.TextField()
+    address = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -135,9 +137,9 @@ class Students(models.Model):
     admin = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, related_name="student"
     )
-    gender = models.CharField(max_length=50)
-    profile_pic = models.FileField()
-    address = models.TextField()
+    gender = models.CharField(max_length=50, null=True)
+    profile_pic = models.FileField(blank=True, null=True)
+    address = models.TextField(null=True)
     course_id = models.ForeignKey(Courses, on_delete=models.DO_NOTHING, default=1)
     session_year_id = models.ForeignKey(
         SessionYearModel, null=True, on_delete=models.CASCADE
@@ -286,3 +288,23 @@ def save_user_profile(sender, instance, **kwargs):
         instance.staff.save()
     elif instance.user_type == "3":  # Student
         instance.student.save()
+
+
+@receiver(post_delete, sender=CustomUser)
+def delete_profile_image(sender, instance, **kwargs):
+    # Check if the user has a profile image
+    """
+    Delete the profile image associated with a CustomUser when the CustomUser is deleted.
+
+    This receiver is connected to the post_delete signal of the CustomUser model.
+    It checks if the user has a profile image and if so, deletes the image from
+    the media directory.
+    """
+    if instance.profile_pic:
+        # Build the path to the profile image file
+        image_path = os.path.join(str(instance.profile_pic))
+
+        # Delete the profile image file
+        if os.path.exists(image_path):
+            os.remove(image_path)
+        print("Image deleted: " + image_path)

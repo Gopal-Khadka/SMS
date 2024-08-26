@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-# from . import student_views
+from . import student_views
 
 app_name = "main_app"
 urlpatterns = [
@@ -12,7 +12,7 @@ urlpatterns = [
     path("dashboard", views.dashboard, name="dashboard"),
     
     # URLS for Student 
-	# path('student_home/', student_views.student_home, name="student_home"), 
+	path('student_home/', student_views.student_home, name="student_home"), 
 	# path('student_view_attendance/', student_views.student_view_attendance, name="student_view_attendance"), 
 	# path('student_view_attendance_post/', student_views.student_view_attendance_post, name="student_view_attendance_post"), 
 	# path('student_apply_leave/', student_views.student_apply_leave, name="student_apply_leave"), 
