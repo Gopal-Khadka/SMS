@@ -2,6 +2,8 @@
 {% block title %}Home{%endblock title %} 
 
 {%block content %}
+<div class="d-flex">
+
 <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
       <span class="fs-4">SMS</span>
@@ -40,17 +42,17 @@
       </li>
     </ul>
     <hr>
-    <div class="dropdown">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-        <strong>mdo</strong>
+
+      <a href="#" class="d-flex align-items-center text-white text-decoration-none">
+        <img src="{{profile_pic}}" alt="" width="32" height="32" class="rounded-circle me-2">
+        <strong>{{name}}</strong>
       </a>
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" style="">
-        <li><a class="dropdown-item" href="{% url "main_app:index" %}">Home</a></li>
-        <li><a class="dropdown-item" href="{% url "main_app:contact" %}">Contact</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="{% url "main_app:logOutUser" %}">Sign out</a></li>
-      </ul>
-    </div>
+      
+  
   </div>
+
+  <!-- For menu content for all types of the user-->
+{% block menu_content %}{% endblock menu_content %}
+
+</div>
 {%endblock content%}

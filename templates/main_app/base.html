@@ -34,7 +34,7 @@
   <body class="bg-dark" data-bs-theme="dark">
     <!-- NAVBAR -->
     <!-- Check if the current page is not 'dashboard' before including the navbar -->
-    {% if request.path != '/dashboard' %}
+    {% if request.path != '/menu' %}
       {% include "main_app/navbar.html" %}
     {% endif %}
     <!-- CONTENT -->
