@@ -2,7 +2,18 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import EmailField, PasswordInput
-from .models import CustomUser
+from .models import (
+    CustomUser,
+    Attendance,
+    AttendanceReport,
+    FeedbackStaff,
+    FeedbackStudent,
+    Admin,
+    Course,
+    Session,
+    Student,
+    Staff,
+)
 from django.utils.translation import gettext_lazy as _
 
 
@@ -11,8 +22,6 @@ class CustomUserAdmin(UserAdmin):
     """Define admin model for custom User model with no email field."""
 
     model = CustomUser
-    ordering = ("email",)
-    list_display = ["email"]
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (
@@ -22,7 +31,6 @@ class CustomUserAdmin(UserAdmin):
                     "first_name",
                     "last_name",
                     "gender",
-                    "user_type",
                     "profile_pic",
                 )
             },
@@ -46,10 +54,21 @@ class CustomUserAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "password1", "password2"),
+                "fields": ("email", "password1", "password2", "user_type"),
             },
         ),
     )
-    list_display = ("email", "first_name", "last_name", "is_staff")
+    list_display = ("email", "first_name", "last_name", "is_staff", "user_type")
     search_fields = ("email", "first_name", "last_name")
     ordering = ("email",)
+
+
+admin.site.register(Admin)
+admin.site.register(Course)
+admin.site.register(Session)
+admin.site.register(Student)
+admin.site.register(Staff)
+admin.site.register(Attendance)
+admin.site.register(AttendanceReport)
+admin.site.register(FeedbackStaff)
+admin.register(FeedbackStudent)
