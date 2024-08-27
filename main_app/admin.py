@@ -13,6 +13,7 @@ from .models import (
     Session,
     Student,
     Staff,
+    Subject,
 )
 from django.utils.translation import gettext_lazy as _
 
@@ -71,4 +72,5 @@ admin.site.register(Staff)
 admin.site.register(Attendance)
 admin.site.register(AttendanceReport)
 admin.site.register(FeedbackStaff)
-admin.register(FeedbackStudent)
+admin.site.register(FeedbackStudent)
+admin.site.register(Subject)

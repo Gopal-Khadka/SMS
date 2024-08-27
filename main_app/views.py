@@ -4,21 +4,26 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-@login_required(login_url='main_app:logInUser')
+
+@login_required(login_url="main_app:logInUser")
 def index(request):
     return render(request, "main_app/index.html")
 
-@login_required(login_url='main_app:logInUser')
+
+@login_required(login_url="main_app:logInUser")
 def menu(request):
     return render(request, "main_app/menu.html")
 
-@login_required(login_url='main_app:logInUser')
+
+@login_required(login_url="main_app:logInUser")
 def contact(request):
     return render(request, "main_app/contact.html")
 
-@login_required(login_url='main_app:logInUser')
+
+@login_required(login_url="main_app:logInUser")
 def services(request):
     return render(request, "main_app/services.html")
+
 
 def logInUser(request):
     context = {"today": datetime.today().year}
@@ -41,3 +46,16 @@ def logInUser(request):
 def logOutUser(request):
     logout(request)
     return redirect("main_app:logInUser")
+
+
+@login_required(login_url="main_app:logInUser")
+def menu(request):
+    context = {
+        "name": request.user.full_name,
+        "gender": "Male" if request.user.gender == "M" else "Female",
+        "email": request.user.email,
+        "user_type": request.user.user_type,
+        "profile_pic": request.user.profile_pic.url,
+    }
+
+    return render(request, "student_template/home.html", context=context)

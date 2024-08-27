@@ -9,7 +9,16 @@ urlpatterns = [
     path("logout", views.logOutUser, name="logOutUser"),
     path("contact", views.contact, name="contact"),
     path("services", views.services, name="services"),
-    path("menu/",include('main_app.menu_urls')), 
     # urls for student views
-    # path("student_home/", student_views.home, name="student_home"),
+    path("menu/", views.menu, name="menu"),
+    path(
+        "student/show_teachers",
+        student_views.show_teachers,
+        name="student_show_teachers",
+    ),
+     path(
+        "student/show_classmates",
+        student_views.show_classmates,
+        name="student_show_classmates",
+    ),
 ]

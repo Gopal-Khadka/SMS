@@ -119,7 +119,7 @@ class Staff(models.Model):
     )
 
     def __str__(self):
-        return self.admin.last_name + " " + self.admin.first_name
+        return self.admin.email
 
 
 class Subject(models.Model):
@@ -209,22 +209,22 @@ class StudentResult(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-@receiver(post_save, sender=CustomUser)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        if instance.user_type == "1":
-            Admin.objects.create(admin=instance)
-        elif instance.user_type == "2":
-            Staff.objects.create(admin=instance)
-        elif instance.user_type == "3":
-            Student.objects.create(admin=instance)
+# @receiver(post_save, sender=CustomUser)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         if instance.user_type == "1":
+#             Admin.objects.create(admin=instance)
+#         elif instance.user_type == "2":
+#             Staff.objects.create(admin=instance)
+#         elif instance.user_type == "3":
+#             Student.objects.create(admin=instance)
 
 
-@receiver(post_save, sender=CustomUser)
-def save_user_profile(sender, instance, **kwargs):
-    if instance.user_type == "1":
-        instance.admin.save()
-    elif instance.user_type == "2":
-        instance.staff.save()  # Access the related Staff instance through the 'staff' attribute
-    elif instance.user_type == "3":
-        instance.student.save()
+# @receiver(post_save, sender=CustomUser)
+# def save_user_profile(sender, instance, **kwargs):
+#     if instance.user_type == "1":
+#         instance.admin.save()
+#     elif instance.user_type == "2":
+#         instance.staff.save()  # Access the related Staff instance through the 'staff' attribute
+#     elif instance.user_type == "3":
+#         instance.student.save()
