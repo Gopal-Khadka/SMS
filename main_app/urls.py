@@ -16,9 +16,14 @@ urlpatterns = [
         student_views.show_teachers,
         name="student_show_teachers",
     ),
-     path(
+    path(
         "student/show_classmates",
         student_views.show_classmates,
         name="student_show_classmates",
+    ),
+    path(
+        "student/show_attendance",
+        student_views.show_attendance,
+        name="student_show_attendance",
     ),
 ]

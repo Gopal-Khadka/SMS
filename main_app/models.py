@@ -143,6 +143,9 @@ class Attendance(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self) -> str:
+        return self.subject.name + " - " + str(self.date)
+
 
 class AttendanceReport(models.Model):
     student = models.ForeignKey(Student, on_delete=models.DO_NOTHING)
@@ -150,6 +153,9 @@ class AttendanceReport(models.Model):
     status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"{self.student.admin.full_name} - {self.attendance.subject.name} - {self.attendance.date}"
 
 
 class LeaveReportStudent(models.Model):

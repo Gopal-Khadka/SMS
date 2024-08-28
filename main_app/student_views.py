@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
+from pprint import pprint
 
 
 @login_required(login_url="main_app:logInUser")
@@ -53,4 +54,35 @@ def show_classmates(request):
 
     return render(
         request, "student_template/classmates.html", context={"classmates": classmates}
+    )
+
+
+@login_required(login_url="main_app:logInUser")
+def show_attendance(request):
+    subject_id = 1  # C Pr3ogramming
+
+    # Get the current user
+    current_user = CustomUser.objects.get(id=request.user.id)
+
+    # Get the current user's student object
+    current_student = Student.objects.get(admin=current_user)
+
+    # Get the attendance report for current student and the given subject
+    student_attendance_reports = AttendanceReport.objects.filter(
+        student=current_student, attendance__subject__id=subject_id
+    )
+
+    # Print or iterate over the attendance records
+    attendance_list = []
+    for attendance_report in student_attendance_reports:
+        _item = {
+            "date": attendance_report.attendance.date,
+            "status": "Present" if attendance_report.status else "Absent",
+            "subject": attendance_report.attendance.subject.name,
+        }
+        attendance_list.append(_item)
+    return render(
+        request,
+        "student_template/attendance.html",
+        {"attendance_list": attendance_list},
     )

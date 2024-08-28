@@ -1,0 +1,26 @@
+{% extends "../main_app/menu.html" %}
+
+{% block menu_content %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">Subject</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for attendance in attendance_list %}
+        <tr>
+            <td>{{attendance.date}}</td>
+            <td>{{attendance.status}}</td>
+            <td>{{attendance.subject}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+   
+</ul>
+{% endblock menu_content %}
+
+

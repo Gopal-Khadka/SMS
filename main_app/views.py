@@ -55,7 +55,7 @@ def menu(request):
         "gender": "Male" if request.user.gender == "M" else "Female",
         "email": request.user.email,
         "user_type": request.user.user_type,
-        "profile_pic": request.user.profile_pic.url,
+        # "profile_pic": request.user.profile_pic.url or None,
     }
 
     return render(request, "student_template/home.html", context=context)
