@@ -11,7 +11,7 @@ class SubjectSelectionForm(forms.Form):
         self.fields["subjects"].queryset = subjects_queryset
 
 
-class StudentProfileEditForm(forms.Form):
+class StudentProfileEditForm(forms.ModelForm):
     email = forms.EmailField(
         label="Email",
         required=False,
@@ -38,10 +38,37 @@ class StudentProfileEditForm(forms.Form):
 
     def __init__(self, student: Student, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["email"].initial = student.admin.email
+        self.instance = student
+        self.fields["email"].initial = (
+            student.admin.email
+        )  # set saved email as default value in input
         self.fields["dob"].initial = student.dob
         self.fields["parents_num"].initial = student.parents_num
         self.fields["gender"].initial = student.admin.gender
 
+    def save(self, commit=True):
+        """
+        Saves the student's profile changes to the database.
+
+        Args:
+            commit (bool): If True, saves the changes to the database. Defaults to True.
+
+        Returns:
+            Student: The updated student instance.
+
+        """
+        student = self.instance
+        student.admin.email = self.cleaned_data["email"]  # get submitted email
+        student.dob = self.cleaned_data["dob"]  # get submitted dob
+        student.parents_num = self.cleaned_data[
+            "parents_num"
+        ]  # get submitted parents_num
+        student.admin.gender = self.cleaned_data["gender"]  # get submitted gender
+        if commit:
+            student.admin.save()  # save email and gender in customuser model
+            student.save()  # save dob and parents_num in student model
+        return student
+
     class Meta:
-        model = Student  # denotes that this form is for model "Student"
+        model = Student
+        fields = ()

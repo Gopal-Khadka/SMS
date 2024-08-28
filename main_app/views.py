@@ -58,6 +58,13 @@ def menu(request):
         case "3":
             current_student = return_current_student(request)
             form = StudentProfileEditForm(student=current_student)
+            if request.method == "POST":
+                form = StudentProfileEditForm(
+                    student=current_student, data=request.POST
+                )
+                if form.is_valid():
+                    form.save()
+
             return render(
                 request,
                 "student_template/home.html",
