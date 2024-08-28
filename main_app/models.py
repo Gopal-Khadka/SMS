@@ -109,6 +109,10 @@ class Student(models.Model):
         related_name="students",
     )
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
+    address = models.TextField(blank=True, null=True)
+    father_name = models.CharField(max_length=120, blank=True, null=True)
+    mother_name = models.CharField(max_length=120, blank=True, null=True)
+    parents_num = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return self.admin.last_name + ", " + self.admin.first_name
@@ -207,10 +211,12 @@ class NotificationStaff(models.Model):
 
 
 class NotificationStudent(models.Model):
+    STATUS_CHOICES = [("1", "Urgent"), ("0", "General")]
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=1, default="0", choices=STATUS_CHOICES)
 
     def __str__(self):
         return self.student.admin.full_name + " - " + self.message[:50]
