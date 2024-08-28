@@ -1,14 +1,10 @@
 from django.shortcuts import render, redirect
-from datetime import datetime
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import SubjectSelectionForm
 
 
-@login_required(login_url="main_app:logInUser")
-def show_teachers(request):
+def return_current_student(request):
     current_user = CustomUser.objects.get(id=request.user.id)
 
     # Check if the current user is a student
@@ -16,6 +12,13 @@ def show_teachers(request):
         admin=current_user
     )  # Get the Student instance for the current user
 
+    return current_student
+
+
+@login_required(login_url="main_app:logInUser")
+def show_teachers(request):
+
+    current_student = return_current_student(request)
     # Query all the teachers who teach the subjects associated with the courses the current student is enrolled in
     teachers_teaching_current_user = Staff.objects.filter(
         subject__course=current_student.course
@@ -32,11 +35,7 @@ def show_teachers(request):
 @login_required(login_url="main_app:logInUser")
 def show_classmates(request):
 
-    # Get the current user's user_type and session year from the database
-    current_user = CustomUser.objects.get(id=request.user.id)
-
-    # Get the current user's student object
-    current_student = Student.objects.get(admin=current_user)
+    current_student = return_current_student(request)
 
     # Get the course and session of the current student
     current_course = current_student.course
@@ -45,7 +44,7 @@ def show_classmates(request):
     # Query for other students in the same course and session
     students_in_same_course_and_session = Student.objects.filter(
         course=current_course, session=current_session
-    ).exclude(admin=current_user)
+    ).exclude(admin=current_student.admin)
 
     # Print or iterate over the teachers who teach the current user
     classmates = [
@@ -59,11 +58,8 @@ def show_classmates(request):
 
 @login_required(login_url="main_app:logInUser")
 def show_attendance(request):
-    # Get the current user
-    current_user = CustomUser.objects.get(id=request.user.id)
+    current_student = return_current_student(request)
 
-    # Get the current user's student object
-    current_student = Student.objects.get(admin=current_user)
     subject_id = None
     if request.method == "POST":
         form = SubjectSelectionForm(current_student, request.POST)
@@ -96,3 +92,11 @@ def show_attendance(request):
         "student_template/attendance.html",
         {"attendance_list": attendance_list, "form": form},
     )
+
+
+@login_required(login_url="main_app:logInUser")
+def show_notices(request):
+    current_student = return_current_student(request)
+    notices = NotificationStudent.objects.filter(student=current_student)
+    notices = list(enumerate(notices, start=1))
+    return render(request, "student_template/notices.html", {"notices": notices})

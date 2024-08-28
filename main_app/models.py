@@ -102,7 +102,11 @@ class Student(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name="student"
     )
     course = models.ForeignKey(
-        Course, on_delete=models.DO_NOTHING, null=True, blank=False,related_name="students"
+        Course,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=False,
+        related_name="students",
     )
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
 
@@ -198,12 +202,18 @@ class NotificationStaff(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.staff.admin.full_name + " - " + self.message[:50]
+
 
 class NotificationStudent(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.student.admin.full_name + " - " + self.message[:50]
 
 
 class StudentResult(models.Model):

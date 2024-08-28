@@ -26,4 +26,9 @@ urlpatterns = [
         student_views.show_attendance,
         name="student_show_attendance",
     ),
+    path(
+        "student/show_notices",
+        student_views.show_notices,
+        name="student_show_notices",
+    ),
 ]

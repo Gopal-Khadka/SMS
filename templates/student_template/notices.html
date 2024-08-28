@@ -1,0 +1,33 @@
+{% extends "../main_app/menu.html" %}
+
+{% block menu_content %}
+<div class="d-flex gap-3 mt-3 justify-content-center">
+
+    {% if notices %}
+    <table class="table table-bordered table-hover w-75">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Message</th>
+            <th scope="col">Created At</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for idx,notice in notices %}
+            <tr>
+                <td>{{idx}}</td>
+                <td>{{notice.message}}</td>
+                <td>{{notice.created_at}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <span class="text-center">You have no notices from the management.</span>
+    {% endif %}
+  
+</div>
+
+{% endblock menu_content %}
+
+
