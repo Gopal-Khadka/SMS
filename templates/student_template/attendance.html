@@ -1,35 +1,53 @@
 {% extends "../main_app/menu.html" %}
 
 {% block menu_content %}
-<div class="d-flex gap-3 mt-3 flex-column">
-
-  <form action="" method="post">
-    <div class="d-flex gap-2 align-items-center">
-      {% csrf_token %}
-      {{form.as_div}}
-  
-      <button type="submit" class="btn"><i class="fa fa-solid fa-magnifying-glass"></i></button>
-    </div>
-  </form>
-  <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Date</th>
-          <th scope="col">Status</th>
-          <th scope="col">Subject</th>
-        </tr>
-      </thead>
-      <tbody>
-          {% for attendance in attendance_list %}
+<div class="d-flex gap-3 mt-3 flex-column px-3 mx-auto w-50">
+    <form action="" method="post">
+      <div class="d-flex gap-2 align-items-center">
+        {% csrf_token %}
+        {{form.as_div}}
+    
+        <button type="submit" class="btn"><i class="fa fa-solid fa-magnifying-glass"></i></button>
+      </div>
+    </form>
+    <table class="table table-bordered table-hover border-light">
+        <thead>
           <tr>
-              <td>{{attendance.date}}</td>
-              <td>{{attendance.status}}</td>
-              <td>{{attendance.subject}}</td>
+            <th scope="col">S.No</th>
+            <th scope="col">Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Subject</th>
           </tr>
-          {% endfor %}
-      </tbody>
+        </thead>
+        <tbody>
+            {% for idx,attendance in attendance_list %}
+            <tr>
+              <td>{{idx}}</td>
+                <td>{{attendance.date}}</td>
+                <td>{{attendance.status}}</td>
+                <td>{{attendance.subject}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+
+    <button class="btn btn-success w-50" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetarget" aria-expanded="false" aria-controls="collapsetarget">
+      Show more details
+    </button>
+    
+    <!--COLLAPSE BUTTON-->
+    <div class="collapse " id="collapsetarget">
+      <div class="card card-body">
+        <ul class="list-group-item list-unstyled">
+          <li>No of records: {{attendance_list | length}}</li>
+          <li>Present: {{present_count}} | Absent: {{absent_count}}</li>
+          <li>No of subjects: {{unique_subjects_count}}</li>
+        </ul>
+      </div>
+    </div>
 </div>
+
+
 
 {% endblock menu_content %}
 

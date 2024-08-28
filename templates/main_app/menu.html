@@ -10,29 +10,29 @@
       <span class="fs-4">SMS</span>
     </a>
     <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column">
       <li class="nav-item">
-        <a href="" class="nav-link active" aria-current="page">
+        <a href="{% url "main_app:menu" %}" class="nav-link text-white" >
           Dashboard
         </a>
       </li>
       <li>
-        <a href="" class="nav-link text-white">
+        <a href="{% url "main_app:student_show_teachers" %}" class="nav-link text-white">
           Teacher
         </a>
       </li>
       <li>
-        <a href="" class="nav-link text-white">
+        <a href="{% url "main_app:student_show_classmates" %}" class="nav-link text-white">
           Student
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link text-white">
+        <a href="{% url "main_app:student_show_attendance" %}" class="nav-link text-white">
           Attendance
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link text-white">
+        <a href="{% url "main_app:student_show_notices" %}" class="nav-link text-white">
           Notices
         </a>
       </li>

@@ -87,11 +87,19 @@ def show_attendance(request):
             "subject": attendance_report.attendance.subject.name,
         }
         attendance_list.append(_item)
-    return render(
-        request,
-        "student_template/attendance.html",
-        {"attendance_list": attendance_list, "form": form},
-    )
+
+    context = {
+        "attendance_list": list(enumerate(attendance_list, start=1)),
+        "form": form,
+        "present_count": sum(
+            1 for item in attendance_list if item["status"] == "Present"
+        ),
+        "absent_count": sum(
+            1 for item in attendance_list if item["status"] == "Absent"
+        ),
+        "unique_subjects_count": len(set(item["subject"] for item in attendance_list)),
+    }
+    return render(request, "student_template/attendance.html", context)
 
 
 @login_required(login_url="main_app:logInUser")

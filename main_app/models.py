@@ -110,6 +110,7 @@ class Student(models.Model):
     )
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
     address = models.TextField(blank=True, null=True)
+    # dob = models.DateField(blank=True, null=True)
     father_name = models.CharField(max_length=120, blank=True, null=True)
     mother_name = models.CharField(max_length=120, blank=True, null=True)
     parents_num = models.CharField(max_length=20, blank=True, null=True)
