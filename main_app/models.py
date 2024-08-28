@@ -136,8 +136,9 @@ class Subject(models.Model):
     staff = models.ForeignKey(
         Staff,
         on_delete=models.CASCADE,
+        related_name="subjects"
     )
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,related_name="subjects")
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

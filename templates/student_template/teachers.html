@@ -1,12 +1,47 @@
 {% extends "../main_app/menu.html" %}
-
+{% block title %}View Teachers{% endblock title %}
 {% block menu_content %}
-<ul class="list-group">
+<table class="table table-bordered table-hover border-light">
+    <thead>
+      <tr>
+        <th scope="col">S.No</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Gender</th> 
+        <th scope="col">Subject</th> 
+      </tr>
+    </thead>
+    <tbody>
+        {% for idx,teacher in teachers %}
+        <tr>
+          <td>{{idx}}</td>
+            <td>{{teacher.admin.full_name}}</td>
+            <td>{{teacher.admin.email}}</td>
+            <td>{{teacher.admin.gender}}</td> 
+            <td class="text-justify">
+                <!--Only show subject taught by respective teacher in current user's course-->
+                {% for subject in teacher.subjects.all%}
+                    {% if  subject in teacher.course.subjects.all%}
+                        {{subject}},
+                    {% endif %}
+                {% endfor %}
+            </td> 
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-    {% for teacher in teachers %}
-    
-    <li class="list-group-item"> {{teacher}}</li>
-    {% endfor %}
-   
-</ul>
+<button class="btn btn-success w-50" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetarget" aria-expanded="false" aria-controls="collapsetarget">
+  Show more details
+</button>
+
+<!--COLLAPSE BUTTON -->
+<div class="collapse " id="collapsetarget">
+  <div class="card card-body">
+    <ul class="list-group-item list-unstyled">
+      <li>No of records: {{teachers | length}}</li>
+      <li>Males:  {{males_count}} | Females: {{females_count}}</li>
+    </ul>
+  </div>
+</div>
 {% endblock menu_content %}

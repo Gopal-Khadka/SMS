@@ -21,15 +21,17 @@ def show_teachers(request):
     current_student = return_current_student(request)
     # Query all the teachers who teach the subjects associated with the courses the current student is enrolled in
     teachers_teaching_current_user = Staff.objects.filter(
-        subject__course=current_student.course
+        subjects__course=current_student.course
     ).distinct()
 
     # Print or iterate over the teachers who teach the current user
-    teachers = [teacher.admin.full_name for teacher in teachers_teaching_current_user]
-
-    return render(
-        request, "student_template/teachers.html", context={"teachers": teachers}
-    )
+    teachers = list(enumerate(teachers_teaching_current_user, start=1))
+    context = {
+        "teachers": teachers,
+        "males_count": len(teachers_teaching_current_user.filter(admin__gender="M")),
+        "females_count": len(teachers_teaching_current_user.filter(admin__gender="F")),
+    }
+    return render(request, "student_template/teachers.html", context)
 
 
 @login_required(login_url="main_app:logInUser")
