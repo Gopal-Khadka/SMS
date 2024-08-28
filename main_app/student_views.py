@@ -47,13 +47,17 @@ def show_classmates(request):
     ).exclude(admin=current_student.admin)
 
     # Print or iterate over the teachers who teach the current user
-    classmates = [
-        student.admin.full_name for student in students_in_same_course_and_session
-    ]
-
-    return render(
-        request, "student_template/classmates.html", context={"classmates": classmates}
-    )
+    classmates = list(enumerate(students_in_same_course_and_session, start=1))
+    context = {
+        "classmates": classmates,
+        "males_count": len(
+            students_in_same_course_and_session.filter(admin__gender="M")
+        ),
+        "females_count": len(
+            students_in_same_course_and_session.filter(admin__gender="F")
+        ),
+    }
+    return render(request, "student_template/classmates.html", context)
 
 
 @login_required(login_url="main_app:logInUser")

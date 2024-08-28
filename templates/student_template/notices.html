@@ -1,10 +1,8 @@
 {% extends "../main_app/menu.html" %}
 
 {% block menu_content %}
-<div class="d-flex gap-3 mt-3 justify-content-center">
-
     {% if notices %}
-    <table class="table table-bordered table-hover w-75">
+    <table class="table table-bordered table-hover border-light">
         <thead>
           <tr>
             <th scope="col">ID</th>
@@ -26,7 +24,6 @@
       <span class="text-center">You have no notices from the management.</span>
     {% endif %}
   
-</div>
 
 {% endblock menu_content %}
 
