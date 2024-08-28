@@ -3,6 +3,8 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .forms import StudentProfileEditForm
+from .student_views import return_current_student
 
 
 @login_required(login_url="main_app:logInUser")
@@ -50,12 +52,16 @@ def logOutUser(request):
 
 @login_required(login_url="main_app:logInUser")
 def menu(request):
-    context = {
-        "name": request.user.full_name,
-        "gender": "Male" if request.user.gender == "M" else "Female",
-        "email": request.user.email,
-        "user_type": request.user.user_type,
-        # "profile_pic": request.user.profile_pic.url or None,
-    }
-
-    return render(request, "student_template/home.html", context=context)
+    user_types = {"1": "Admin", "2": "Staff", "3": "Student"}
+    user_type = user_types[str(request.user.user_type)]
+    match (request.user.user_type):
+        case "3":
+            current_student = return_current_student(request)
+            form = StudentProfileEditForm(student=current_student)
+            return render(
+                request,
+                "student_template/home.html",
+                context={"user": request.user, "user_type": user_type, "form": form},
+            )
+        case _:
+            return render(request, "main_app/menu.html")
