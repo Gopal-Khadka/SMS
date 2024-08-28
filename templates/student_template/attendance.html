@@ -1,26 +1,36 @@
 {% extends "../main_app/menu.html" %}
 
 {% block menu_content %}
-<table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Date</th>
-        <th scope="col">Status</th>
-        <th scope="col">Subject</th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for attendance in attendance_list %}
+<div class="d-flex gap-3 mt-3 flex-column">
+
+  <form action="" method="post">
+    <div class="d-flex gap-2 align-items-center">
+      {% csrf_token %}
+      {{form.as_div}}
+  
+      <button type="submit" class="btn"><i class="fa fa-solid fa-magnifying-glass"></i></button>
+    </div>
+  </form>
+  <table class="table">
+      <thead>
         <tr>
-            <td>{{attendance.date}}</td>
-            <td>{{attendance.status}}</td>
-            <td>{{attendance.subject}}</td>
+          <th scope="col">Date</th>
+          <th scope="col">Status</th>
+          <th scope="col">Subject</th>
         </tr>
-        {% endfor %}
-    </tbody>
-  </table>
-   
-</ul>
+      </thead>
+      <tbody>
+          {% for attendance in attendance_list %}
+          <tr>
+              <td>{{attendance.date}}</td>
+              <td>{{attendance.status}}</td>
+              <td>{{attendance.subject}}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+</div>
+
 {% endblock menu_content %}
 
 

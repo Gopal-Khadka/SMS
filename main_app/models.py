@@ -102,7 +102,7 @@ class Student(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name="student"
     )
     course = models.ForeignKey(
-        Course, on_delete=models.DO_NOTHING, null=True, blank=False
+        Course, on_delete=models.DO_NOTHING, null=True, blank=False,related_name="students"
     )
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
 

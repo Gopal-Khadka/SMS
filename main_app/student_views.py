@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
-from pprint import pprint
+from .forms import SubjectSelectionForm
 
 
 @login_required(login_url="main_app:logInUser")
@@ -59,18 +59,28 @@ def show_classmates(request):
 
 @login_required(login_url="main_app:logInUser")
 def show_attendance(request):
-    subject_id = 1  # C Pr3ogramming
-
     # Get the current user
     current_user = CustomUser.objects.get(id=request.user.id)
 
     # Get the current user's student object
     current_student = Student.objects.get(admin=current_user)
+    subject_id = None
+    if request.method == "POST":
+        form = SubjectSelectionForm(current_student, request.POST)
+        if form.is_valid():
+            subject_id = form.cleaned_data["subjects"].id
+    else:
+        form = SubjectSelectionForm(student=current_student)
 
     # Get the attendance report for current student and the given subject
-    student_attendance_reports = AttendanceReport.objects.filter(
-        student=current_student, attendance__subject__id=subject_id
-    )
+    if subject_id:
+        student_attendance_reports = AttendanceReport.objects.filter(
+            student=current_student, attendance__subject__id=subject_id
+        )
+    else:
+        student_attendance_reports = AttendanceReport.objects.filter(
+            student=current_student
+        )
 
     # Print or iterate over the attendance records
     attendance_list = []
@@ -84,5 +94,5 @@ def show_attendance(request):
     return render(
         request,
         "student_template/attendance.html",
-        {"attendance_list": attendance_list},
+        {"attendance_list": attendance_list, "form": form},
     )
