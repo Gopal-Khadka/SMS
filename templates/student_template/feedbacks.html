@@ -1,0 +1,31 @@
+{% extends "../main_app/menu.html" %}
+{% block title %}View Feedback{% endblock title %}
+
+{% block menu_content %}
+    {% if feedbacks %}
+    <table class="table table-bordered table-hover border-light">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Message</th>
+            <th scope="col">Reply</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for idx,feedback in feedbacks %}
+            <tr>
+                <td>{{idx}}</td>
+                <td>{{feedback.feedback}}</td>
+                <td>{{feedback.reply}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <span class="text-center">You have no feedbacks from the management.</span>
+    {% endif %}
+  
+
+{% endblock menu_content %}
+
+

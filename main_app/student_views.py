@@ -114,3 +114,11 @@ def show_notices(request):
     notices = NotificationStudent.objects.filter(student=current_student)
     notices = list(enumerate(notices, start=1))
     return render(request, "student_template/notices.html", {"notices": notices})
+
+
+@login_required(login_url="main_app:logInUser")
+def show_feedbacks(request):
+    current_student = return_current_student(request)
+    feedbacks = FeedbackStudent.objects.filter(student=current_student)
+    feedbacks = list(enumerate(feedbacks, start=1))
+    return render(request, "student_template/feedbacks.html", {"feedbacks": feedbacks})

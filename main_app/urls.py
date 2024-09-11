@@ -31,4 +31,9 @@ urlpatterns = [
         student_views.show_notices,
         name="student_show_notices",
     ),
+    path(
+        "student/show_feedbacks",
+        student_views.show_feedbacks,
+        name="student_show_feedbacks",
+    ),
 ]

@@ -1,4 +1,5 @@
 {% extends "../main_app/menu.html" %}
+{% load static %}
 {% block title %}View Profile{% endblock title %}
 
 {% block menu_content %}
@@ -6,8 +7,14 @@
 <div class="card mb-3" style="border-radius: .5rem;">
     <div class="row g-0">
         <div class="col-md-4 gradient-custom text-center text-white">
+            {% if user.profile_pic %}
+            
             <img src="{{user.profile_pic.url}}"
                 alt="Avatar" class="img-fluid my-5 rounded-circle" style="width: 80px;" />
+                {% else %}
+            <img src="{% static "main_app/img/ditto.png" %}"
+                alt="Ditto" class="img-fluid my-5 rounded-circle" style="width: 80px;" title="Ditto" />
+            {% endif %}
             <h5>{{user.name}}</h5>
             <p>{{user_type}}</p>
             <button class="btn btn-primary w-50" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetarget" aria-expanded="false" aria-controls="collapsetarget">

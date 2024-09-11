@@ -34,12 +34,20 @@
           Notices
         </a>
       </li>
+      <li>
+        <a href="{% url "main_app:student_show_feedbacks" %}" class="nav-link text-white">
+          Feedback
+        </a>
+      </li>
     </ul>
     <hr>
 
       <a href="#" class="d-flex align-items-center text-white text-decoration-none">
-        {% if request.user.profile_pic.url %}
+        {% if request.user.profile_pic %}
           <img src="{{request.user.profile_pic.url}}" alt="" width="32" height="32" class="rounded-circle me-2">
+          {% else %}
+          <img src="{% static "main_app/img/ditto.png" %}" alt="" width="32" height="32" class="rounded-circle me-2">
+
         {% endif %}
         <strong>{{request.user.full_name}}</strong>
       </a>
