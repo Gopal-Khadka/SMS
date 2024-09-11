@@ -35,6 +35,11 @@ class StudentProfileEditForm(forms.ModelForm):
         choices=CustomUser.GENDER_CHOICES,
         widget=forms.Select(attrs={"class": "form-control"}),
     )
+    address = forms.CharField(
+        label="Address",
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
 
     def __init__(self, student: Student, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -45,6 +50,7 @@ class StudentProfileEditForm(forms.ModelForm):
         self.fields["dob"].initial = student.dob
         self.fields["parents_num"].initial = student.parents_num
         self.fields["gender"].initial = student.admin.gender
+        self.fields["address"].initial = student.address
 
     def save(self, commit=True):
         """
@@ -64,9 +70,10 @@ class StudentProfileEditForm(forms.ModelForm):
             "parents_num"
         ]  # get submitted parents_num
         student.admin.gender = self.cleaned_data["gender"]  # get submitted gender
+        student.address = self.cleaned_data["address"]  # get submitted gender
         if commit:
             student.admin.save()  # save email and gender in customuser model
-            student.save()  # save dob and parents_num in student model
+            student.save()  # save dob, address and parents_num in student model
         return student
 
     class Meta:

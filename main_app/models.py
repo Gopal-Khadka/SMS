@@ -133,12 +133,10 @@ class Staff(models.Model):
 
 class Subject(models.Model):
     name = models.CharField(max_length=120)
-    staff = models.ForeignKey(
-        Staff,
-        on_delete=models.CASCADE,
-        related_name="subjects"
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="subjects")
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="subjects"
     )
-    course = models.ForeignKey(Course, on_delete=models.CASCADE,related_name="subjects")
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -192,6 +190,9 @@ class FeedbackStudent(models.Model):
     reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.student.admin.full_name + " - " + str(self.created_at.date())
 
 
 class FeedbackStaff(models.Model):
